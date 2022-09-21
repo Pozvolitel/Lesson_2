@@ -5,19 +5,19 @@ using UnityEngine;
 public class MovePlayer : MonoBehaviour
 {
     private float _speed = 2f;
-    private Animator animator;
-    private float animationInterpolation = 1f;
-    private float animationZeroX = 0;
-    private float animationZeroY = 0;
-    public float currentSpeed;
-    private Rigidbody rig;
-    private Vector3 movingVector;
-    public Transform target;
+    private Animator _animator;
+    private float _animationInterpolation = 1f;
+    private float _animationZeroX = 0;
+    private float _animationZeroY = 0;
+    public float CurrentSpeed;
+    private Rigidbody _rig;
+    private Vector3 _movingVector;
+    public Transform Target;
 
     private void Start()
     {
-        rig = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
+        _rig = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
     }
     void Update()
     {
@@ -27,29 +27,29 @@ public class MovePlayer : MonoBehaviour
         }
         else
         {
-            animationZeroX = Mathf.Lerp(animationZeroX, Input.GetAxis("Horizontal"), Time.deltaTime * 7);
-            animationZeroY = Mathf.Lerp(animationZeroY, Input.GetAxis("Vertical"), Time.deltaTime * 7);
-            animator.SetFloat("x", animationZeroX);
-            animator.SetFloat("y", animationZeroY);
+            _animationZeroX = Mathf.Lerp(_animationZeroX, Input.GetAxis("Horizontal"), Time.deltaTime * 7);
+            _animationZeroY = Mathf.Lerp(_animationZeroY, Input.GetAxis("Vertical"), Time.deltaTime * 7);
+            _animator.SetFloat("x", _animationZeroX);
+            _animator.SetFloat("y", _animationZeroY);
         }
 
-        transform.LookAt(target);
-        Vector3 camF = Camera.main.transform.forward;
-        Vector3 camR = Camera.main.transform.right;
+        transform.LookAt(Target);
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
 
-        camF.y = 0;
-        camR.y = 0;
-        movingVector = Vector3.ClampMagnitude(camF.normalized * Input.GetAxis("Vertical") * currentSpeed + camR.normalized * Input.GetAxis("Horizontal") * currentSpeed, currentSpeed);
+        camForward.y = 0;
+        camRight.y = 0;
+        _movingVector = Vector3.ClampMagnitude(camForward.normalized * Input.GetAxis("Vertical") * CurrentSpeed + camRight.normalized * Input.GetAxis("Horizontal") * CurrentSpeed, CurrentSpeed);
 
-        rig.velocity = new Vector3(movingVector.x, rig.velocity.y, movingVector.z);
-        rig.angularVelocity = Vector3.zero;
+        _rig.velocity = new Vector3(_movingVector.x, _rig.velocity.y, _movingVector.z);
+        _rig.angularVelocity = Vector3.zero;
     }
     void Walk()
     {       
-        animationInterpolation = Mathf.Lerp(animationInterpolation, 1f, Time.deltaTime * 3);
-        animator.SetFloat("x", Input.GetAxis("Horizontal") * animationInterpolation);
-        animator.SetFloat("y", Input.GetAxis("Vertical") * animationInterpolation);
+        _animationInterpolation = Mathf.Lerp(_animationInterpolation, 1f, Time.deltaTime * 3);
+        _animator.SetFloat("x", Input.GetAxis("Horizontal") * _animationInterpolation);
+        _animator.SetFloat("y", Input.GetAxis("Vertical") * _animationInterpolation);
 
-        currentSpeed = Mathf.Lerp(currentSpeed, _speed, Time.deltaTime * 3);
+        CurrentSpeed = Mathf.Lerp(CurrentSpeed, _speed, Time.deltaTime * 3);
     }
 }
